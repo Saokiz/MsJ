@@ -1,0 +1,8 @@
+node_modules
+.DS_Store
+*.pyc
+__pycache__/
+*.log
+.claude/
+secure_server.py
+
