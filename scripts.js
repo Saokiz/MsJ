@@ -1,3 +1,33 @@
+        // 背景音乐
+        const bgMusic = new Audio('music/匿名好友.mp3');
+        bgMusic.loop = true;
+        bgMusic.volume = 0.5;
+
+        function tryAutoPlay() {
+            const playPromise = bgMusic.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                    console.log('音乐自动播放成功');
+                }).catch(error => {
+                    console.log('自动播放被阻止，等待用户交互');
+                });
+            }
+        }
+
+        // 页面点击时播放（浏览器需要用户交互）
+        document.addEventListener('click', () => {
+            if (bgMusic.paused) {
+                tryAutoPlay();
+            }
+        });
+
+        // 页面可见性变化时尝试播放
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && bgMusic.paused) {
+                tryAutoPlay();
+            }
+        });
+
         // 分页功能
         let currentPage = 0;
         const itemsPerPage = 3;
