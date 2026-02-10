@@ -11,6 +11,17 @@
     <div class="overlay"></div>
     <button class="theme-toggle" id="themeToggle">🌙️ 暗色</button>
 
+    <!-- 语言切换 -->
+    <div class="lang-dropdown">
+        <button id="langToggle">🌐 中文</button>
+        <div class="lang-menu" id="langMenu">
+            <div class="lang-option" data-lang="zh">🌐 中文</div>
+            <div class="lang-option" data-lang="zhTW">🌐 繁體</div>
+            <div class="lang-option" data-lang="en">🌐 English</div>
+            <div class="lang-option" data-lang="ja">🌐 日本語</div>
+        </div>
+    </div>
+
     <div class="main-layout">
         <!-- 顶部小组件区域 -->
         <div class="small-widgets-section">
@@ -18,7 +29,7 @@
             <div class="small-widgets-grid">
                 <!-- 计数器1 -->
                 <div class="widget-card" data-widget="small">
-                    <h2>计数器1</h2>
+                    <h2 data-i18n="counter1">计数器1</h2>
                     <div style="display: flex; gap: 10px; justify-content: center; align-items: center; margin-bottom: 12px;">
                         <button id="btn">+1</button>
                         <button id="not">-1</button>
@@ -28,7 +39,7 @@
 
                 <!-- 计数器2 -->
                 <div class="widget-card" data-widget="small">
-                    <h2>计数器2</h2>
+                    <h2 data-i18n="counter2">计数器2</h2>
                     <div id="counter" style="text-align: center; font-size: 28px; margin: 12px 0; font-weight: bold; color: #666;">0</div>
                     <div style="display: flex; gap: 10px; justify-content: center;">
                         <button id="increment">+</button>
@@ -38,35 +49,35 @@
 
                 <!-- 计算器 -->
                 <div class="widget-card" data-widget="small">
-                    <h2>计算器</h2>
+                    <h2 data-i18n="calculator">计算器</h2>
                     <div class="calculator-container">
                         <div class="calculator-inputs">
-                            <input type="number" id="num1" placeholder="数字1" class="calc-input">
+                            <input type="number" id="num1" placeholder="数字1" data-i18n-placeholder="num1" class="calc-input">
                             <select id="operator" class="calc-operator">
                                 <option value="+">+</option>
                                 <option value="-">−</option>
                                 <option value="*">×</option>
                                 <option value="/">÷</option>
                             </select>
-                            <input type="number" id="num2" placeholder="数字2" class="calc-input">
+                            <input type="number" id="num2" placeholder="数字2" data-i18n-placeholder="num2" class="calc-input">
                         </div>
-                        <button id="calculate" class="calc-btn">计算</button>
+                        <button id="calculate" class="calc-btn" data-i18n="calcBtn">计算</button>
                         <div id="result" class="calc-result"></div>
                     </div>
                 </div>
 
                 <!-- 番茄钟 -->
                 <div class="widget-card" data-widget="small">
-                    <h2>番茄钟</h2>
+                    <h2 data-i18n="pomodoro">番茄钟</h2>
                     <div class="tomato-timer" id="tomatoTimer">25:00</div>
                     <div class="tomato-controls">
-                        <button class="tomato-mode-btn active" id="workModeBtn" onclick="setTomatoMode('work')">工作</button>
-                        <button class="tomato-mode-btn" id="shortBreakModeBtn" onclick="setTomatoMode('short')">短休</button>
-                        <button class="tomato-mode-btn" id="longBreakModeBtn" onclick="setTomatoMode('long')">长休</button>
+                        <button class="tomato-mode-btn active" id="workModeBtn" onclick="setTomatoMode('work')" data-i18n="work">工作</button>
+                        <button class="tomato-mode-btn" id="shortBreakModeBtn" onclick="setTomatoMode('short')" data-i18n="shortBreak">短休</button>
+                        <button class="tomato-mode-btn" id="longBreakModeBtn" onclick="setTomatoMode('long')" data-i18n="longBreak">长休</button>
                     </div>
                     <div style="text-align: center; margin-top: 12px; display: flex; gap: 8px; justify-content: center;">
-                        <button id="tomatoStart" onclick="toggleTomato()">开始</button>
-                        <button id="tomatoReset" onclick="resetTomato()">重置</button>
+                        <button id="tomatoStart" onclick="toggleTomato()" data-i18n="start">开始</button>
+                        <button id="tomatoReset" onclick="resetTomato()" data-i18n="reset">重置</button>
                     </div>
                     <div style="text-align: center; margin-top: 10px; font-size: 12px; color: #666;">
                         已完成: <span id="tomatoCount" style="font-weight: bold; color: #667eea;">0</span> 个
@@ -75,64 +86,102 @@
 
                 <!-- 密码生成器 -->
                 <div class="widget-card" data-widget="small">
-                    <h2>密码生成器</h2>
+                    <h2 data-i18n="passwordGen">密码生成器</h2>
                     <div style="margin-bottom: 12px;">
-                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px;">长度: <span id="lengthValue" style="color: #667eea;">12</span></label>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px;"><span data-i18n="length">长度</span>: <span id="lengthValue" style="color: #667eea;">12</span></label>
                         <input type="range" id="passwordLength" min="6" max="32" value="12" style="width: 100%;" oninput="document.getElementById('lengthValue').textContent=this.value">
                     </div>
                     <div style="margin-bottom: 12px;">
-                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px;">包含:</label>
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px;"><span data-i18n="include">包含</span>:</label>
                         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                            <label><input type="checkbox" id="uppercase" checked style="margin-right: 4px;">大写</label>
-                            <label><input type="checkbox" id="lowercase" checked style="margin-right: 4px;">小写</label>
-                            <label><input type="checkbox" id="numbers" checked style="margin-right: 4px;">数字</label>
-                            <label><input type="checkbox" id="symbols" style="margin-right: 4px;">符号</label>
+                            <label><input type="checkbox" id="uppercase" checked style="margin-right: 4px;" data-i18n="uppercase">大写</label>
+                            <label><input type="checkbox" id="lowercase" checked style="margin-right: 4px;" data-i18n="lowercase">小写</label>
+                            <label><input type="checkbox" id="numbers" checked style="margin-right: 4px;" data-i18n="numbers">数字</label>
+                            <label><input type="checkbox" id="symbols" style="margin-right: 4px;" data-i18n="symbols">符号</label>
                         </div>
                     </div>
-                    <button onclick="generatePassword()" style="width: 100%;">生成</button>
+                    <button onclick="generatePassword()" style="width: 100%;" data-i18n="generate">生成</button>
                     <div class="password-result" id="passwordResult" style="display: none;"></div>
                 </div>
 
                 <!-- 用户注册 -->
                 <div class="widget-card" data-widget="small">
-                    <h2>用户注册</h2>
+                    <h2 data-i18n="userRegister">用户注册</h2>
                     <form id="user" style="display: flex; flex-direction: column; align-items: center;">
-                        <input type="text" id="name" placeholder="用户名" style="width: 70%; margin-bottom: 10px;">
-                        <input type="email" id="email" placeholder="邮箱" style="width: 70%; margin-bottom: 10px;">
-                        <button type="submit" style="width: 70%;">注册</button>
+                        <input type="text" id="name" placeholder="用户名" data-i18n-placeholder="name" style="width: 70%; margin-bottom: 10px;">
+                        <input type="email" id="email" placeholder="邮箱" data-i18n-placeholder="emailLabel" style="width: 70%; margin-bottom: 10px;">
+                        <button type="submit" style="width: 70%" data-i18n="register">注册</button>
                     </form>
                     <div id="result-form" style="margin-top: 12px; text-align: center;"></div>
                 </div>
 
                 <!-- 选项卡 -->
                 <div class="widget-card" data-widget="small">
-                    <h2>选项卡</h2>
+                    <h2 data-i18n="tabs">选项卡</h2>
                     <div class="tabs">
-                        <button class="tab-btn active" data-tab="tab1">选项卡1</button>
-                        <button class="tab-btn" data-tab="tab2">选项卡2</button>
-                        <button class="tab-btn" data-tab="tab3">选项卡3</button>
+                        <button class="tab-btn active" data-tab="tab1" data-i18n="tab1">选项卡1</button>
+                        <button class="tab-btn" data-tab="tab2" data-i18n="tab2">选项卡2</button>
+                        <button class="tab-btn" data-tab="tab3" data-i18n="tab3">选项卡3</button>
                     </div>
                     <div class="tab-content">
-                        <div id="tab1" class="tab-pane active">内容1</div>
-                        <div id="tab2" class="tab-pane">内容2</div>
-                        <div id="tab3" class="tab-pane">内容3</div>
+                        <div id="tab1" class="tab-pane active" data-i18n="content1">内容1</div>
+                        <div id="tab2" class="tab-pane" data-i18n="content2">内容2</div>
+                        <div id="tab3" class="tab-pane" data-i18n="content3">内容3</div>
                     </div>
                 </div>
 
                 <!-- 转盘抽奖 -->
                 <div class="widget-card" data-widget="small">
-                    <h2>转盘抽奖</h2>
+                    <h2 data-i18n="wheel">转盘抽奖</h2>
                     <canvas id="wheelCanvas" width="180" height="180" style="display: block; margin: 10px auto;"></canvas>
-                    <button id="spinWheel" style="width: 100%; background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);">开始抽奖</button>
+                    <button id="spinWheel" data-i18n="startSpin" style="width: 100%; background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);">开始抽奖</button>
                     <div id="wheelResult" style="text-align: center; margin-top: 10px; font-weight: bold; color: #667eea; min-height: 20px;"></div>
                 </div>
 
                 <!-- 随机笑话 -->
                 <div class="widget-card" data-widget="small">
-                    <h2>随机笑话</h2>
+                    <h2 data-i18n="randomJoke">随机笑话</h2>
                     <div id="jokeContent" style="min-height: 80px; margin: 12px 0; padding: 12px; background: #f9f9f9; border-radius: 8px; border-left: 4px solid #667eea; font-size: 13px; line-height: 1.5;"></div>
-                    <button id="getJoke" style="width: 100%;">换一个</button>
+                        <button id="getJoke" style="width: 100%" data-i18n="nextJoke">换一个</button>
                     <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #999;">已看 <span id="jokeCount">0</span> 个笑话</p>
+                </div>
+
+                <!-- 实时时钟 -->
+                <div class="widget-card" data-widget="small">
+                    <h2 data-i18n="realClock">实时时钟</h2>
+                    <div id="realtimeClock" style="font-size: 24px; font-weight: bold; text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 10px; margin: 10px 0;"></div>
+                    <div id="realtimeDate" style="text-align: center; font-size: 13px; color: #666;"></div>
+                </div>
+
+                <!-- BMI计算器 -->
+                <div class="widget-card" data-widget="small">
+                    <h2 data-i18n="bmi">BMI计算器</h2>
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px;">身高 (cm):</label>
+                        <input type="number" id="bmiHeight" placeholder="170" style="width: 100%; margin: 0;">
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px;">体重 (kg):</label>
+                        <input type="number" id="bmiWeight" placeholder="65" style="width: 100%; margin: 0;">
+                    </div>
+                    <button onclick="calculateBMI()" style="width: 100%;">计算 BMI</button>
+                    <div id="bmiResult" style="margin-top: 12px; text-align: center; font-size: 16px; font-weight: bold; min-height: 24px;"></div>
+                    <div id="bmiStatus" style="text-align: center; font-size: 13px; color: #667eea; margin-top: 5px;"></div>
+                </div>
+
+                <!-- 随机数生成器 -->
+                <div class="widget-card" data-widget="small">
+                    <h2 data-i18n="randomGen">随机数生成器</h2>
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px;">最小值:</label>
+                        <input type="number" id="randomMin" value="1" style="width: 100%; margin: 0;">
+                    </div>
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px;">最大值:</label>
+                        <input type="number" id="randomMax" value="100" style="width: 100%; margin: 0;">
+                    </div>
+                    <button onclick="generateRandomNumber()" style="width: 100%;">生成随机数</button>
+                    <div id="randomResult" style="margin-top: 12px; text-align: center; font-size: 24px; font-weight: bold; color: #667eea; min-height: 36px;"></div>
                 </div>
             </div>
         </div>
@@ -159,9 +208,9 @@
                         </div>
                     </div>
                     <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 10px;">
-                        <button id="startTetris" style="background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);">开始</button>
-                        <button id="pauseTetris" style="background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);">暂停</button>
-                        <button id="resetTetris" style="background: linear-gradient(135deg, #f44336 0%, #ef5350 100%);">重置</button>
+                        <button id="startTetris" data-i18n="tetrisStart" style="background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);">开始</button>
+                        <button id="pauseTetris" data-i18n="tetrisPause" style="background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);">暂停</button>
+                        <button id="resetTetris" data-i18n="tetrisReset" style="background: linear-gradient(135deg, #f44336 0%, #ef5350 100%);">重置</button>
                     </div>
                     <div style="color: white; font-size: 12px; text-align: center;">
                         <p>← → 移动 | ↑ 旋转 | ↓ 加速 | 空格 落底</p>
@@ -173,13 +222,13 @@
                 <div class="widget-card" data-widget="large" data-page="0">
                     <h2>图片画廊</h2>
                     <div style="display: flex; gap: 10px; margin-bottom: 12px; justify-content: center; align-items: center; flex-wrap: wrap;">
-                        <button id="prevBtn">上一张</button>
+                        <button id="prevBtn" data-i18n="prev">上一张</button>
                         <span id="imageInfo" style="padding: 6px 14px; background: #f0f0f0; border-radius: 8px; font-weight: 500;">图片 1 / 5</span>
-                        <button id="nextBtn">下一张</button>
-                        <button id="f5" style="background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);">刷新</button>
+                        <button id="nextBtn" data-i18n="next">下一张</button>
+                        <button id="f5" data-i18n="refresh" style="background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);">刷新</button>
                     </div>
                     <div style="margin-bottom: 12px; display: flex; justify-content: center; align-items: center; gap: 10px;">
-                        <label style="font-weight: 500;">缩放:</label>
+                        <label style="font-weight: 500;" data-i18n="zoom">缩放:</label>
                         <input type="range" id="sizeSlider" min="50" max="200" value="100" style="width: 150px;">
                         <span id="sizeValue" style="font-weight: 500; color: #667eea;">100%</span>
                     </div>
@@ -193,13 +242,13 @@
                 <div class="widget-card" data-widget="large" data-page="0">
                     <h2>员工搜索</h2>
                     <div style="display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap;">
-                        <input type="text" id="searchInput" placeholder="搜索..." style="flex: 1; min-width: 150px; padding: 12px 16px; font-size: 14px;">
+                        <input type="text" id="searchInput" placeholder="搜索..." data-i18n-placeholder="search" style="flex: 1; min-width: 150px; padding: 12px 16px; font-size: 14px;">
                         <select id="departmentFilter" style="padding: 12px 16px; font-size: 14px;">
-                            <option value="">所有部门</option>
-                            <option value="技术部">技术部</option>
-                            <option value="市场部">市场部</option>
-                            <option value="人力资源">人力资源</option>
-                            <option value="财务部">财务部</option>
+                            <option value="" data-i18n="allDept">所有部门</option>
+                            <option value="技术部" data-i18n="techDept">技术部</option>
+                            <option value="市场部" data-i18n="marketDept">市场部</option>
+                            <option value="人力资源" data-i18n="hrDept">人力资源</option>
+                            <option value="财务部" data-i18n="financeDept">财务部</option>
                         </select>
                     </div>
                     <div id="employeeCount" style="margin-bottom: 10px;"></div>
@@ -222,13 +271,13 @@
                     <h2>绘画板</h2>
                     <canvas id="drawCanvas" width="400" height="300" style="border: 2px solid #e0e0e0; border-radius: 8px; cursor: crosshair; display: block; margin: 10px auto;"></canvas>
                     <div style="display: flex; gap: 8px; justify-content: center; margin-top: 10px; flex-wrap: wrap;">
-                        <button id="clearCanvas" style="background: linear-gradient(135deg, #f44336 0%, #ef5350 100%);">清空</button>
-                        <button id="saveCanvas" style="background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);">保存</button>
+                        <button id="clearCanvas" data-i18n="clear" style="background: linear-gradient(135deg, #f44336 0%, #ef5350 100%);">清空</button>
+                        <button id="saveCanvas" data-i18n="save" style="background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);">保存</button>
                     </div>
                     <div style="display: flex; gap: 8px; justify-content: center; margin-top: 10px; align-items: center;">
-                        <label style="font-size: 12px;">颜色:</label>
+                        <label style="font-size: 12px;" data-i18n="color">颜色:</label>
                         <input type="color" id="drawColor" value="#667eea" style="width: 40px; height: 30px;">
-                        <label style="font-size: 12px;">大小:</label>
+                        <label style="font-size: 12px;" data-i18n="size">大小:</label>
                         <input type="range" id="brushSize" min="1" max="20" value="3" style="width: 60px;">
                     </div>
                 </div>
@@ -285,14 +334,14 @@
                     <h2 style="color: #ff4081;">表白小天地</h2>
                     <div id="loveMessage" style="min-height: 40px; margin: 15px 0; text-align: center;"></div>
                     <div style="text-align: center; margin-bottom: 15px;">
-                        <button id="loveBtn" style="background: linear-gradient(135deg, #ff4081 0%, #ff8a80 100%); width: 100%;">点击我想对你说</button>
+                        <button id="loveBtn" data-i18n="loveBtnText" style="background: linear-gradient(135deg, #ff4081 0%, #ff8a80 100%); width: 100%;">点击我想对你说</button>
                     </div>
                     <p style="text-align: center; margin: 10px 0; color: #ff69b4; font-size: 13px;">已发送 <span id="heartCount" style="font-weight: bold;">0</span> 颗心</p>
                     <div style="margin-top: 15px; text-align: center;">
                         <p style="color: #ff69b4; margin-bottom: 10px; font-size: 14px;">你愿意接受我的心意吗？</p>
                         <div style="display: flex; gap: 10px; justify-content: center;">
-                            <button id="acceptBtn" style="background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);">愿意</button>
-                            <button id="rejectBtn" style="background: linear-gradient(135deg, #9e9e9e 0%, #bdbdbd 100%);">暂时不想</button>
+                            <button id="acceptBtn" data-i18n="accept" style="background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);">愿意</button>
+                            <button id="rejectBtn" data-i18n="reject" style="background: linear-gradient(135deg, #9e9e9e 0%, #bdbdbd 100%);">暂时不想</button>
                         </div>
                     </div>
                     <div id="loveResponse" style="margin-top: 15px; min-height: 40px; text-align: center;"></div>
@@ -302,9 +351,9 @@
                 <div class="widget-card" data-widget="large" data-page="2">
                     <h2>📅 日历</h2>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <button id="prevMonth" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">◀ 上月</button>
+                        <button id="prevMonth" data-i18n="prevMonth" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">◀ 上月</button>
                         <span id="currentMonth" style="font-weight: bold; font-size: 18px; color: #667eea;"></span>
-                        <button id="nextMonth" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">下月 ▶</button>
+                        <button id="nextMonth" data-i18n="nextMonth" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">下月 ▶</button>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center;">
                         <div style="font-weight: bold; color: #999; padding: 8px;">日</div>
@@ -320,9 +369,9 @@
                         <h3 style="font-size: 14px; margin-bottom: 8px; color: #666;">📝 添加事件</h3>
                         <div style="display: flex; gap: 8px; margin-bottom: 8px;">
                             <input type="date" id="eventDate" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
-                            <input type="text" id="eventText" placeholder="事件内容" style="flex: 2; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
-                        </div>
-                        <button id="addEventBtn" style="width: 100%; background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);">添加</button>
+                            <input type="text" id="eventText" placeholder="事件内容" data-i18n-placeholder="eventContent" style="flex: 2; padding: 8px; border: 1px solid #ddd; border-radius: 6px;">
+                            </div>
+                            <button id="addEventBtn" data-i18n="addEvent" style="width: 100%; background: linear-gradient(135deg, #4caf50 0%, #81c784 100%);">添加</button>
                     </div>
                     <div id="eventList" style="margin-top: 10px; max-height: 150px; overflow-y: auto;"></div>
                 </div>
@@ -331,18 +380,18 @@
                 <div class="widget-card" data-widget="large" data-page="2" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
                     <h2 style="color: white;">📋 待办事项</h2>
                     <div style="display: flex; gap: 8px; margin-bottom: 15px;">
-                        <input type="text" id="todoInput" placeholder="添加新任务..." style="flex: 1; padding: 10px; border: none; border-radius: 6px;">
+                        <input type="text" id="todoInput" placeholder="添加新任务..." data-i18n-placeholder="addNewTask" style="flex: 1; padding: 10px; border: none; border-radius: 6px;">
                         <select id="todoPriority" style="padding: 10px; border: none; border-radius: 6px;">
                             <option value="low">低</option>
                             <option value="medium">中</option>
                             <option value="high">高</option>
                         </select>
                     </div>
-                    <button id="addTodoBtn" style="width: 100%; margin-bottom: 15px; background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%); color: #333;">+ 添加任务</button>
+                    <button id="addTodoBtn" data-i18n="addTodo" style="width: 100%; margin-bottom: 15px; background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%); color: #333;">+ 添加任务</button>
                     <div style="display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
-                        <button class="filter-btn" data-filter="all" style="background: white; color: #333; padding: 6px 12px; border: none; border-radius: 15px; font-size: 12px;">全部</button>
-                        <button class="filter-btn" data-filter="active" style="background: rgba(255,255,255,0.3); color: white; padding: 6px 12px; border: none; border-radius: 15px; font-size: 12px;">进行中</button>
-                        <button class="filter-btn" data-filter="completed" style="background: rgba(255,255,255,0.3); color: white; padding: 6px 12px; border: none; border-radius: 15px; font-size: 12px;">已完成</button>
+                        <button class="filter-btn" data-filter="all" data-i18n="filterAll" style="background: white; color: #333; padding: 6px 12px; border: none; border-radius: 15px; font-size: 12px;">全部</button>
+                        <button class="filter-btn" data-filter="active" data-i18n="filterActive" style="background: rgba(255,255,255,0.3); color: white; padding: 6px 12px; border: none; border-radius: 15px; font-size: 12px;">进行中</button>
+                        <button class="filter-btn" data-filter="completed" data-i18n="filterCompleted" style="background: rgba(255,255,255,0.3); color: white; padding: 6px 12px; border: none; border-radius: 15px; font-size: 12px;">已完成</button>
                     </div>
                     <div id="todoList" style="max-height: 200px; overflow-y: auto;"></div>
                     <div id="todoStats" style="margin-top: 10px; font-size: 12px; color: white; text-align: center;">
@@ -355,7 +404,7 @@
                     <h2 style="color: white;">🎵 音乐播放器</h2>
                     <canvas id="audioVisualizer" width="300" height="100" style="background: rgba(0,0,0,0.2); border-radius: 8px; margin-bottom: 15px; width: 100%;"></canvas>
                     <div style="text-align: center; margin-bottom: 15px;">
-                        <p id="songTitle" style="color: white; font-size: 16px; margin: 5px 0;">选择一首歌曲</p>
+                        <p id="songTitle" data-i18n="selectSong" style="color: white; font-size: 16px; margin: 5px 0;">选择一首歌曲</p>
                         <p id="songArtist" style="color: rgba(255,255,255,0.7); font-size: 14px;">--</p>
                     </div>
                     <div style="margin-bottom: 15px;">
@@ -371,7 +420,7 @@
                         <button id="nextSong" style="background: rgba(255,255,255,0.2); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">⏭</button>
                     </div>
                     <div style="display: flex; gap: 10px; justify-content: center; align-items: center; margin-bottom: 15px;">
-                        <span style="color: rgba(255,255,255,0.7); font-size: 12px;">音量</span>
+                        <span data-i18n="volume" style="color: rgba(255,255,255,0.7); font-size: 12px;">音量</span>
                         <input type="range" id="volumeSlider" min="0" max="100" value="70" style="width: 100px;">
                         <span id="volumeValue" style="color: rgba(255,255,255,0.7); font-size: 12px;">70%</span>
                     </div>
@@ -383,7 +432,7 @@
                         <p style="color: rgba(255,255,255,0.8); font-size: 12px; margin-bottom: 8px;">🔗 或输入音乐链接</p>
                         <div style="display: flex; gap: 8px;">
                             <input type="text" id="musicUrlInput" placeholder="https://..." style="flex: 1; padding: 6px 10px; border: none; border-radius: 4px; font-size: 12px;">
-                            <button id="loadUrlBtn" style="padding: 6px 12px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 4px; font-size: 12px;">加载</button>
+                            <button id="loadUrlBtn" data-i18n="load" style="padding: 6px 12px; background: rgba(255,255,255,0.2); color: white; border: none; border-radius: 4px; font-size: 12px;">加载</button>
                         </div>
                     </div>
                     <div id="playlistList" style="margin-top: 12px; max-height: 80px; overflow-y: auto; font-size: 11px; color: rgba(255,255,255,0.8);"></div>
@@ -399,21 +448,22 @@
                         </div>
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <input type="text" id="chatInput" placeholder="输入消息..." style="flex: 1; padding: 12px; border: none; border-radius: 20px;">
-                        <button id="sendChat" style="background: white; color: #11998e; padding: 12px 20px; border: none; border-radius: 20px; font-weight: bold;">发送</button>
+                        <input type="text" id="chatInput" placeholder="输入消息..." data-i18n-placeholder="chatPlaceholder" style="flex: 1; padding: 12px; border: none; border-radius: 20px;">
+                        <button id="sendChat" data-i18n="send" style="background: white; color: #11998e; padding: 12px 20px; border: none; border-radius: 20px; font-weight: bold;">发送</button>
                     </div>
                 </div>
             </div>
 
             <!-- 分页控制 -->
-            <div class="pagination-controls">
-                <button class="page-btn" id="prevPageBtn">上一页</button>
+                <div class="pagination-controls">
+                <button class="page-btn" id="prevPageBtn" data-i18n="prev" data-i18n-attr="aria-label:prev">上一页</button>
                 <span class="pagination-info">第 <span id="currentPageNum">1</span> 页 / 共 <span id="totalPageNum">4</span> 页</span>
-                <button class="page-btn" id="nextPageBtn">下一页</button>
+                <button class="page-btn" id="nextPageBtn" data-i18n="next" data-i18n-attr="aria-label:next">下一页</button>
             </div>
         </div>
     </div>
 
+    <script src="i18n.js"></script>
     <script src="scripts.js"></script>
 </body>
 </html>

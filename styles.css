@@ -61,7 +61,7 @@ body {
 .small-widgets-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 15px;
 }
 
 /* 分割线 */
@@ -178,6 +178,83 @@ body {
 /* 隐藏的组件 */
 .widget-card.hidden {
     display: none;
+}
+
+/* 语言下拉菜单 */
+.lang-dropdown {
+    position: fixed;
+    top: 20px;
+    /* 增加右侧偏移以拉开与主题按钮的间距 */
+    right: 160px;
+    z-index: 10000;
+}
+
+#langToggle {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+}
+
+#langToggle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+}
+
+.lang-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    min-width: 150px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.lang-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.lang-option {
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.lang-option:hover {
+    background: #f0f0f0;
+}
+
+.lang-option.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+body.dark-mode .lang-menu {
+    background: #1e1e2e;
+}
+
+body.dark-mode .lang-option:hover {
+    background: #2c2c3e;
+}
+
+body.dark-mode #langToggle {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 }
 
 /* 暗黑模式 */
@@ -619,5 +696,15 @@ body.dark-mode #employeeCount {
     }
     .section-title {
         font-size: 20px;
+    }
+
+    /* 小屏幕下把语言按钮与主题按钮分开堆叠，避免重叠 */
+    .lang-dropdown {
+        right: 20px;
+        top: 20px;
+    }
+    .theme-toggle {
+        right: 20px;
+        top: 72px;
     }
 }

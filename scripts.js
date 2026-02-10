@@ -44,8 +44,13 @@
                 }
             });
 
-            document.getElementById('currentPageNum').textContent = currentPage + 1;
-            document.getElementById('totalPageNum').textContent = totalPages;
+            const paginationEl = document.querySelector('.pagination-info');
+            if (typeof t === 'function' && paginationEl) {
+                paginationEl.textContent = t('paginationInfo', { current: currentPage + 1, total: totalPages });
+            } else {
+                document.getElementById('currentPageNum').textContent = currentPage + 1;
+                document.getElementById('totalPageNum').textContent = totalPages;
+            }
             document.getElementById('prevPageBtn').disabled = currentPage === 0;
             document.getElementById('nextPageBtn').disabled = currentPage === totalPages - 1;
         }
@@ -1255,3 +1260,76 @@
                 document.getElementById('totalKeystrokes').textContent = totalKeystrokes;
             }
         });
+
+        // 实时时钟
+        function updateRealtimeClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('realtimeClock').textContent = hours + ':' + minutes + ':' + seconds;
+
+            const days = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const weekday = days[now.getDay()];
+            document.getElementById('realtimeDate').textContent = year + '年' + month + '月' + day + '日 ' + weekday;
+        }
+        updateRealtimeClock();
+        setInterval(updateRealtimeClock, 1000);
+
+        // BMI计算器
+        window.calculateBMI = function() {
+            const height = parseFloat(document.getElementById('bmiHeight').value);
+            const weight = parseFloat(document.getElementById('bmiWeight').value);
+            const resultEl = document.getElementById('bmiResult');
+            const statusEl = document.getElementById('bmiStatus');
+
+            if (!height || !weight || height <= 0 || weight <= 0) {
+                resultEl.textContent = '请输入有效的数值';
+                statusEl.textContent = '';
+                return;
+            }
+
+            const heightInMeters = height / 100;
+            const bmi = weight / (heightInMeters * heightInMeters);
+            const bmiFixed = bmi.toFixed(1);
+
+            resultEl.textContent = 'BMI: ' + bmiFixed;
+
+            let status = '';
+            let color = '#667eea';
+            if (bmi < 18.5) {
+                status = '偏瘦';
+                color = '#ff9800';
+            } else if (bmi < 24) {
+                status = '正常';
+                color = '#4caf50';
+            } else if (bmi < 28) {
+                status = '偏胖';
+                color = '#ff9800';
+            } else {
+                status = '肥胖';
+                color = '#f44336';
+            }
+            statusEl.textContent = status;
+            statusEl.style.color = color;
+        };
+
+        // 随机数生成器
+        window.generateRandomNumber = function() {
+            const min = parseInt(document.getElementById('randomMin').value);
+            const max = parseInt(document.getElementById('randomMax').value);
+            const resultEl = document.getElementById('randomResult');
+
+            if (isNaN(min) || isNaN(max) || min > max) {
+                resultEl.textContent = '无效范围';
+                resultEl.style.color = '#f44336';
+                return;
+            }
+
+            const randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+            resultEl.textContent = randomNum;
+            resultEl.style.color = '#667eea';
+        };
