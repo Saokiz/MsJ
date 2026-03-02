@@ -233,6 +233,8 @@ body {
     gap: 12px;
     align-items: center;
     z-index: 10000;
+    /* 背景透明，避免按钮背后出现暗色面板 */
+    background: transparent;
     /* 允许换行以适应窄屏，避免溢出重叠 */
     flex-wrap: wrap;
     max-width: calc(100% - 40px);
@@ -240,7 +242,7 @@ body {
 }
 
 /* 取消单独固定定位（由 .top-controls 管理） */
-.lang-dropdown, .music-dropdown { position: static; }
+.lang-dropdown, .music-dropdown { position: static; background: transparent; }
 
 /* 主题按钮改为相对定位以参与 flex 布局 */
 .theme-toggle { position: relative; top: auto; right: auto; }
@@ -771,15 +773,16 @@ body.dark-mode #employeeCount {
     cursor: pointer;
     font-size: 15px;
     font-weight: 500;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    /* 取消阴影，避免出现背景暗色板 */
+    box-shadow: none;
+    transition: transform 0.18s ease;
     white-space: nowrap; /* 防止文字换行导致宽度变化 */
 }
 
-/* 悬停不放大（避免按钮相互覆盖），改为轻微上移和增强阴影 */
+/* 悬停时保留上移，但不添加阴影 */
 #musicToggle:hover, #langToggle:hover, .theme-toggle:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.28);
+    box-shadow: none;
 }
 
 /* 确保按钮不会因容器空间不足而收缩覆盖 */
