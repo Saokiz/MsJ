@@ -189,6 +189,67 @@ body {
     z-index: 10000;
 }
 
+/* 音乐下拉（与语言按钮样式一致） */
+.music-dropdown {
+    /* position handled by .top-controls */
+}
+
+#musicToggle {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #4ecdc4 0%, #11998e 100%);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(30, 200, 180, 0.3);
+    transition: all 0.3s ease;
+}
+#musicToggle:hover { transform: translateY(-2px); }
+
+.music-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 10px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+/* 顶部控件容器，统一布局防止重叠 */
+.top-controls {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    z-index: 10000;
+    /* 允许换行以适应窄屏，避免溢出重叠 */
+    flex-wrap: wrap;
+    max-width: calc(100% - 40px);
+    justify-content: flex-end;
+}
+
+/* 取消单独固定定位（由 .top-controls 管理） */
+.lang-dropdown, .music-dropdown { position: static; }
+
+/* 主题按钮改为相对定位以参与 flex 布局 */
+.theme-toggle { position: relative; top: auto; right: auto; }
+.music-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
 #langToggle {
     padding: 12px 20px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -202,8 +263,22 @@ body {
     transition: all 0.3s ease;
 }
 
+#musicToggle {
+    padding: 10px 14px;
+    margin-right: 8px;
+    background: linear-gradient(135deg, #4ecdc4 0%, #11998e 100%);
+    color: white;
+    border: none;
+    border-radius: 24px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    box-shadow: 0 4px 20px rgba(30, 200, 180, 0.2);
+    transition: all 0.18s ease;
+}
+
 #langToggle:hover {
-    transform: scale(1.05);
+    transform: translateY(-2px);
     box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
 }
 
@@ -290,12 +365,9 @@ body.dark-mode .pagination-info {
     color: #e0e0e0;
 }
 
-/* 主题切换按钮 */
+/* 主题切换按钮 — 参与 .top-controls 布局，不使用 fixed 定位 */
 .theme-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 10000;
+    position: relative;
     padding: 12px 20px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -305,14 +377,42 @@ body.dark-mode .pagination-info {
     font-size: 15px;
     font-weight: 500;
     box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-    transition: all 0.3s ease;
+    transition: all 0.18s ease;
+    flex-shrink: 0;
+    white-space: nowrap;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .theme-toggle:hover {
-    transform: scale(1.1);
+    transform: translateY(-2px);
     box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
 }
 body.dark-mode .theme-toggle {
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+/* 强制 .top-controls 内部元素不收缩并在文本过长时截断，避免拓宽导致重叠 */
+.top-controls > * {
+    flex-shrink: 0;
+    white-space: nowrap;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 小屏时纵向堆叠，作为后备避免横向重叠 */
+@media (max-width: 520px) {
+    .top-controls {
+        flex-direction: column;
+        align-items: flex-end;
+        row-gap: 8px;
+        right: 12px;
+    }
+    .top-controls .lang-dropdown,
+    .top-controls .music-dropdown {
+        width: auto;
+    }
 }
 
 /* 鼠标粒子画布 */
@@ -661,6 +761,35 @@ progress::-webkit-progress-value {
 body.dark-mode #employeeCount {
     color: #a78bfa;
 }
+
+/* 统一 pill 风格按钮（用于音乐、语言、主题） */
+#musicToggle, #langToggle, .theme-toggle {
+    padding: 12px 20px;
+    border-radius: 30px;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    white-space: nowrap; /* 防止文字换行导致宽度变化 */
+}
+
+/* 悬停不放大（避免按钮相互覆盖），改为轻微上移和增强阴影 */
+#musicToggle:hover, #langToggle:hover, .theme-toggle:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.28);
+}
+
+/* 确保按钮不会因容器空间不足而收缩覆盖 */
+.top-controls > * { flex-shrink: 0; }
+
+/* 当换行时，第二行与第一行保持间距 */
+.top-controls { row-gap: 8px; }
+
+/* 确保下拉菜单显示在最前 */
+.music-menu, .lang-menu { z-index: 20000; }
 
 /* 鼠标光效动画 */
 @keyframes mouseGlow {

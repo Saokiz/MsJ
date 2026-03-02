@@ -9,17 +9,31 @@
 <body>
     <div class="rainbow-background"></div>
     <div class="overlay"></div>
-    <button class="theme-toggle" id="themeToggle">🌙️ 暗色</button>
-
-    <!-- 语言切换 -->
-    <div class="lang-dropdown">
-        <button id="langToggle">🌐 中文</button>
-        <div class="lang-menu" id="langMenu">
-            <div class="lang-option" data-lang="zh">🌐 中文</div>
-            <div class="lang-option" data-lang="zhTW">🌐 繁體</div>
-            <div class="lang-option" data-lang="en">🌐 English</div>
-            <div class="lang-option" data-lang="ja">🌐 日本語</div>
+    <div class="top-controls">
+        <!-- 音乐控制（含下拉音量） -->
+        <div class="music-dropdown">
+            <button id="musicToggle">🔊 音乐</button>
+            <div class="music-menu" id="musicMenu">
+                <div style="padding:10px; width:200px;">
+                    <button id="playPauseMusic" style="width:100%; margin-bottom:8px;">播放</button>
+                    <label style="display:block; font-size:13px; margin-bottom:6px;">音量</label>
+                    <input id="volumeControl" type="range" min="0" max="100" value="70" style="width:100%;">
+                </div>
+            </div>
         </div>
+
+        <!-- 语言切换 -->
+        <div class="lang-dropdown">
+            <button id="langToggle">🌐 中文</button>
+            <div class="lang-menu" id="langMenu">
+                <div class="lang-option" data-lang="zh">🌐 中文</div>
+                <div class="lang-option" data-lang="zhTW">🌐 繁體</div>
+                <div class="lang-option" data-lang="en">🌐 English</div>
+                <div class="lang-option" data-lang="ja">🌐 日本語</div>
+            </div>
+        </div>
+
+        <button class="theme-toggle" id="themeToggle">🌙️ 暗色</button>
     </div>
 
     <div class="main-layout">
@@ -27,19 +41,9 @@
         <div class="small-widgets-section">
             <h1 class="section-title">小工具组件</h1>
             <div class="small-widgets-grid">
-                <!-- 计数器1 -->
-                <div class="widget-card" data-widget="small">
-                    <h2 data-i18n="counter1">计数器1</h2>
-                    <div style="display: flex; gap: 10px; justify-content: center; align-items: center; margin-bottom: 12px;">
-                        <button id="btn">+1</button>
-                        <button id="not">-1</button>
-                    </div>
-                    <p style="text-align: center; font-size: 18px;">计数: <span id="count" style="font-weight: bold; color: #667eea;">0</span></p>
-                </div>
-
                 <!-- 计数器2 -->
                 <div class="widget-card" data-widget="small">
-                    <h2 data-i18n="counter2">计数器2</h2>
+                    <h2 data-i18n="counter">计数器</h2>
                     <div id="counter" style="text-align: center; font-size: 28px; margin: 12px 0; font-weight: bold; color: #666;">0</div>
                     <div style="display: flex; gap: 10px; justify-content: center;">
                         <button id="increment">+</button>
@@ -355,14 +359,14 @@
                         <span id="currentMonth" style="font-weight: bold; font-size: 18px; color: #667eea;"></span>
                         <button id="nextMonth" data-i18n="nextMonth" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">下月 ▶</button>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center;">
-                        <div style="font-weight: bold; color: #999; padding: 8px;">日</div>
-                        <div style="font-weight: bold; color: #999; padding: 8px;">一</div>
-                        <div style="font-weight: bold; color: #999; padding: 8px;">二</div>
-                        <div style="font-weight: bold; color: #999; padding: 8px;">三</div>
-                        <div style="font-weight: bold; color: #999; padding: 8px;">四</div>
-                        <div style="font-weight: bold; color: #999; padding: 8px;">五</div>
-                        <div style="font-weight: bold; color: #999; padding: 8px;">六</div>
+                    <div style="display:grid; grid-template-columns:repeat(7, 1fr); gap:5px;">
+                        <div style="font-weight:bold; color:#999; padding:12px; text-align:center;">日</div>
+                        <div style="font-weight:bold; color:#999; padding:12px; text-align:center;">一</div>
+                        <div style="font-weight:bold; color:#999; padding:12px; text-align:center;">二</div>
+                        <div style="font-weight:bold; color:#999; padding:12px; text-align:center;">三</div>
+                        <div style="font-weight:bold; color:#999; padding:12px; text-align:center;">四</div>
+                        <div style="font-weight:bold; color:#999; padding:12px; text-align:center;">五</div>
+                        <div style="font-weight:bold; color:#999; padding:12px; text-align:center;">六</div>
                     </div>
                     <div id="calendarDays" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px;"></div>
                     <div style="margin-top: 15px; border-top: 1px solid #e0e0e0; padding-top: 10px;">

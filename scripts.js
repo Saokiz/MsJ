@@ -1,5 +1,5 @@
         // 背景音乐
-        const bgMusic = new Audio('music/匿名好友.mp3');
+        const bgMusic = new Audio('music/一半一半.mp3');
         bgMusic.loop = true;
         bgMusic.volume = 0.5;
 
@@ -14,19 +14,109 @@
             }
         }
 
-        // 页面点击时播放（浏览器需要用户交互）
-        document.addEventListener('click', () => {
-            if (bgMusic.paused) {
+        // 仅在用户通过音乐按钮明确交互后才允许恢复播放
+        let userClickedMusic = false;
+        // 是否已经安装一次性自动播放监听（用于首次任意点击尝试播放）
+        let autoPlayHandler = null;
+
+        // 安装一次性全局点击监听：第一次非音乐按钮的点击会尝试播放音乐
+        function installOneTimeAutoPlay() {
+            if (autoPlayHandler) return;
+            autoPlayHandler = function(e) {
+                // 如果点击目标是音乐按钮，交给按钮自身处理，不在此自动播放
+                if (e.target && e.target.closest && e.target.closest('#musicToggle')) {
+                    return;
+                }
+                bgMusic.play().then(() => {
+                    userClickedMusic = true;
+                    updateMusicButton();
+                }).catch(() => {});
+            };
+            document.addEventListener('click', autoPlayHandler, { once: true, capture: true });
+        }
+
+        // 取消一次性自动播放监听（例如用户显式交互时）
+        function removeOneTimeAutoPlay() {
+            if (!autoPlayHandler) return;
+            document.removeEventListener('click', autoPlayHandler, { capture: true });
+            autoPlayHandler = null;
+        }
+
+        // 页面可见性变化时仅在用户已通过音乐按钮交互过才尝试恢复播放
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible' && bgMusic.paused && userClickedMusic) {
                 tryAutoPlay();
             }
         });
 
-        // 页面可见性变化时尝试播放
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible' && bgMusic.paused) {
-                tryAutoPlay();
+        // 音乐按钮与下拉菜单逻辑
+        const musicToggleBtn = document.getElementById('musicToggle');
+        const musicMenu = document.getElementById('musicMenu');
+        const playPauseMusicBtn = document.getElementById('playPauseMusic');
+        const volumeControl = document.getElementById('volumeControl');
+
+        function refreshMusicUI() {
+            if (musicToggleBtn) {
+                musicToggleBtn.textContent = bgMusic.paused ? '🔈 音乐' : '🔊 音乐';
             }
-        });
+            if (playPauseMusicBtn) {
+                playPauseMusicBtn.textContent = bgMusic.paused ? '播放' : '暂停';
+            }
+            if (volumeControl) {
+                volumeControl.value = Math.round(bgMusic.volume * 100);
+            }
+        }
+
+        // 切换下拉菜单显示
+        if (musicToggleBtn && musicMenu) {
+            musicToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                // 点击音乐按钮视为显式交互，移除一次性自动播放监听
+                removeOneTimeAutoPlay();
+                userClickedMusic = true;
+                musicMenu.classList.toggle('show');
+                refreshMusicUI();
+            });
+
+            // 点击菜单内的播放/暂停按钮
+            if (playPauseMusicBtn) {
+                playPauseMusicBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (bgMusic.paused) {
+                        bgMusic.play().catch(() => {});
+                    } else {
+                        bgMusic.pause();
+                    }
+                    refreshMusicUI();
+                });
+            }
+
+            // 音量滑块
+            if (volumeControl) {
+                volumeControl.addEventListener('input', (e) => {
+                    const v = Number(e.target.value);
+                    bgMusic.volume = Math.max(0, Math.min(1, v / 100));
+                    if (bgMusic.volume === 0) {
+                        // 视为静音，不自动播放
+                    }
+                });
+            }
+
+            // 点击页面其他地方关闭菜单
+            document.addEventListener('click', (e) => {
+                if (musicMenu && musicMenu.classList.contains('show')) {
+                    if (!e.target.closest || !e.target.closest('.music-dropdown')) {
+                        musicMenu.classList.remove('show');
+                    }
+                }
+            });
+
+            // 初始化UI
+            refreshMusicUI();
+
+            // 安装一次性自动播放监听（页面初始状态：允许第一次非按钮点击触发播放）
+            installOneTimeAutoPlay();
+        }
 
         // 分页功能
         let currentPage = 0;
@@ -235,17 +325,6 @@
             jokeCount++;
             document.getElementById('jokeCount').textContent = jokeCount;
             document.getElementById('jokeContent').textContent = getRandomJoke();
-        });
-
-        // 计数器1
-        let count = 0;
-        document.getElementById('btn').addEventListener('click', () => {
-            count++;
-            document.getElementById('count').textContent = count;
-        });
-        document.getElementById('not').addEventListener('click', () => {
-            count--;
-            document.getElementById('count').textContent = count;
         });
 
         // 计数器2
@@ -751,7 +830,23 @@
             const daysContainer = document.getElementById('calendarDays');
             daysContainer.innerHTML = '';
 
-            for (let i = 0; i < firstDay; i++) {
+            // 依据表头中星期的起始列动态计算需要的空占位数，保证日期列与表头对齐
+            // 找到上方表头（前一个元素）中“日”所在的索引，作为星期日列的位置
+            const headerEl = daysContainer.previousElementSibling;
+            let headerStartIndex = 0; // 默认表头以“日”起始
+            if (headerEl) {
+                const labels = Array.from(headerEl.children).map(ch => ch.textContent.trim());
+                const idx = labels.indexOf('日');
+                if (idx !== -1) headerStartIndex = idx;
+            }
+
+            // 根据 headerStartIndex 计算真正需要的空格数，保证首日落在正确的列
+            const emptySlots = (firstDay - headerStartIndex + 7) % 7;
+            // 调试信息：输出首日索引、表头起始索引与计算结果，便于排查对齐问题
+            try {
+                console.debug('Calendar debug:', { year, month, firstDay, headerStartIndex, emptySlots });
+            } catch (e) {}
+            for (let i = 0; i < emptySlots; i++) {
                 const emptyDay = document.createElement('div');
                 emptyDay.style.padding = '12px';
                 daysContainer.appendChild(emptyDay);
@@ -764,6 +859,7 @@
                 dayEl.style.borderRadius = '50%';
                 dayEl.style.cursor = 'pointer';
                 dayEl.style.transition = 'all 0.3s ease';
+                dayEl.style.textAlign = 'center';
 
                 const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 if (events[dateKey]) {
