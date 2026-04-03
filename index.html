@@ -187,6 +187,111 @@
                     <button onclick="generateRandomNumber()" style="width: 100%;">生成随机数</button>
                     <div id="randomResult" style="margin-top: 12px; text-align: center; font-size: 24px; font-weight: bold; color: #667eea; min-height: 36px;"></div>
                 </div>
+
+                <!-- 单位转换器 -->
+                <div class="widget-card" data-widget="small">
+                    <h2 data-i18n="unitConverter">单位转换</h2>
+                    <div style="margin-bottom: 12px;">
+                        <select id="unitType" style="width: 100%; padding: 8px; margin-bottom: 8px;">
+                            <option value="length">长度 (米/厘米)</option>
+                            <option value="weight">重量 (公斤/克)</option>
+                            <option value="temperature">温度 (℃/℉)</option>
+                        </select>
+                        <input type="number" id="unitInput" placeholder="输入数值" style="width: 100%; margin-bottom: 8px;">
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <select id="unitFrom" style="flex: 1; padding: 6px;">
+                                <option value="m">米</option>
+                                <option value="cm">厘米</option>
+                                <option value="kg">公斤</option>
+                                <option value="g">克</option>
+                                <option value="c">摄氏度</option>
+                                <option value="f">华氏度</option>
+                            </select>
+                            <span>→</span>
+                            <select id="unitTo" style="flex: 1; padding: 6px;">
+                                <option value="cm">厘米</option>
+                                <option value="m">米</option>
+                                <option value="g">克</option>
+                                <option value="kg">公斤</option>
+                                <option value="f">华氏度</option>
+                                <option value="c">摄氏度</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button onclick="convertUnit()" style="width: 100%;" data-i18n="convert">转换</button>
+                    <div id="unitResult" style="margin-top: 12px; text-align: center; font-size: 16px; font-weight: bold; color: #667eea; min-height: 24px;"></div>
+                </div>
+
+                <!-- 颜色选择器 -->
+                <div class="widget-card" data-widget="small">
+                    <h2 data-i18n="colorPicker">颜色选择器</h2>
+                    <div style="margin-bottom: 12px;">
+                        <input type="color" id="colorPickerInput" value="#667eea" style="width: 100%; height: 40px; cursor: pointer;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px;">
+                        <div style="text-align: center;">
+                            <span style="font-size: 11px; color: #666;">HEX</span>
+                            <input type="text" id="hexValue" value="#667eea" style="width: 100%; font-size: 11px; text-align: center;" readonly>
+                        </div>
+                        <div style="text-align: center;">
+                            <span style="font-size: 11px; color: #666;">RGB</span>
+                            <input type="text" id="rgbValue" value="102, 126, 234" style="width: 100%; font-size: 11px; text-align: center;" readonly>
+                        </div>
+                        <div style="text-align: center;">
+                            <span style="font-size: 11px; color: #666;">HSL</span>
+                            <input type="text" id="hslValue" value="231, 76%, 66%" style="width: 100%; font-size: 11px; text-align: center;" readonly>
+                        </div>
+                    </div>
+                    <button onclick="copyColor()" style="width: 100%;" data-i18n="copyColor">复制HEX</button>
+                </div>
+
+                <!-- 进制转换器 -->
+                <div class="widget-card" data-widget="small">
+                    <h2 data-i18n="baseConverter">进制转换</h2>
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px;"><span data-i18n="inputValue">输入数值</span>:</label>
+                        <input type="text" id="baseInput" placeholder="输入数字" style="width: 100%; margin-bottom: 8px;">
+                        <label style="display: block; margin-bottom: 6px; font-weight: 500; font-size: 13px;"><span data-i18n="fromBase">源进制</span>:</label>
+                        <select id="baseFrom" style="width: 100%; margin-bottom: 8px;">
+                            <option value="2">二进制 (2)</option>
+                            <option value="8">八进制 (8)</option>
+                            <option value="10" selected>十进制 (10)</option>
+                            <option value="16">十六进制 (16)</option>
+                        </select>
+                    </div>
+                    <button onclick="convertBase()" style="width: 100%; margin-bottom: 12px;" data-i18n="convert">转换</button>
+                    <div id="baseResults" style="font-size: 12px; line-height: 1.8; background: #f5f5f5; padding: 10px; border-radius: 6px;">
+                        <div>二进制: <span id="binResult" style="color: #667eea; font-weight: bold;"></span></div>
+                        <div>八进制: <span id="octResult" style="color: #667eea; font-weight: bold;"></span></div>
+                        <div>十进制: <span id="decResult" style="color: #667eea; font-weight: bold;"></span></div>
+                        <div>十六进制: <span id="hexResult" style="color: #667eea; font-weight: bold;"></span></div>
+                    </div>
+                </div>
+
+                <!-- 幸运签 -->
+                <div class="widget-card" data-widget="small" style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);">
+                    <h2 data-i18n="fortune">幸运签</h2>
+                    <div id="fortuneBox" style="min-height: 80px; margin: 12px 0; padding: 15px; background: white; border-radius: 8px; text-align: center; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <span id="fortuneText" style="font-size: 14px; color: #333;">点击下方按钮抽取你的幸运签</span>
+                    </div>
+                    <button id="drawFortune" style="width: 100%;" data-i18n="drawFortune">抽签</button>
+                    <p style="text-align: center; margin-top: 10px; font-size: 12px; color: #666;">已抽取 <span id="fortuneCount">0</span> 次</p>
+                </div>
+
+                <!-- 心理测试 -->
+                <div class="widget-card" data-widget="small">
+                    <h2 data-i18n="quiz">心理测试</h2>
+                    <div id="quizQuestion" style="margin-bottom: 12px; padding: 12px; background: #f9f9f9; border-radius: 8px; font-size: 13px; line-height: 1.5;">
+                        你今天心情怎么样？
+                    </div>
+                    <div id="quizOptions" style="display: flex; flex-direction: column; gap: 8px;">
+                        <button class="quiz-option" data-answer="happy" style="padding: 8px; font-size: 12px;">😊 开心</button>
+                        <button class="quiz-option" data-answer="normal" style="padding: 8px; font-size: 12px;">😐 一般</button>
+                        <button class="quiz-option" data-answer="sad" style="padding: 8px; font-size: 12px;">😔 难过</button>
+                        <button class="quiz-option" data-answer="tired" style="padding: 8px; font-size: 12px;">😴 疲惫</button>
+                    </div>
+                    <div id="quizResult" style="margin-top: 12px; padding: 10px; background: #e8f5e9; border-radius: 6px; font-size: 12px; text-align: center; display: none;"></div>
+                </div>
             </div>
         </div>
 
@@ -456,12 +561,33 @@
                         <button id="sendChat" data-i18n="send" style="background: white; color: #11998e; padding: 12px 20px; border: none; border-radius: 20px; font-weight: bold;">发送</button>
                     </div>
                 </div>
+
+                <!-- 记事本 -->
+                <div class="widget-card" data-widget="large" data-page="3">
+                    <h2>📝 记事本</h2>
+                    <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+                        <input type="text" id="noteTitle" placeholder="标题" data-i18n-placeholder="noteTitle" style="flex: 1; min-width: 120px; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+                        <button id="saveNote" data-i18n="saveNote" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 10px 16px; border: none; border-radius: 6px;">保存</button>
+                        <button id="newNote" data-i18n="newNote" style="background: #f0f0f0; padding: 10px 16px; border: none; border-radius: 6px;">新建</button>
+                    </div>
+                    <textarea id="noteContent" placeholder="在这里写笔记..." data-i18n-placeholder="noteContent" style="width: 100%; height: 180px; padding: 12px; border: 1px solid #ddd; border-radius: 8px; resize: none; font-size: 14px; line-height: 1.5;"></textarea>
+                    <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+                        <div style="font-size: 12px; color: #666;">
+                            <span data-i18n="savedNotes">已保存笔记</span>: <span id="noteCount" style="font-weight: bold; color: #667eea;">0</span>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button id="exportNotes" data-i18n="exportNotes" style="background: #4caf50; color: white; padding: 6px 12px; border: none; border-radius: 4px; font-size: 12px;">导出</button>
+                            <button id="clearNotes" data-i18n="clearNotes" style="background: #f44336; color: white; padding: 6px 12px; border: none; border-radius: 4px; font-size: 12px;">清空</button>
+                        </div>
+                    </div>
+                    <div id="noteList" style="margin-top: 12px; max-height: 100px; overflow-y: auto; border-top: 1px solid #e0e0e0; padding-top: 8px;"></div>
+                </div>
             </div>
 
             <!-- 分页控制 -->
                 <div class="pagination-controls">
                 <button class="page-btn" id="prevPageBtn" data-i18n="prev" data-i18n-attr="aria-label:prev">上一页</button>
-                <span class="pagination-info">第 <span id="currentPageNum">1</span> 页 / 共 <span id="totalPageNum">4</span> 页</span>
+                <span class="pagination-info">第 <span id="currentPageNum">1</span> 页 / 共 <span id="totalPageNum">5</span> 页</span>
                 <button class="page-btn" id="nextPageBtn" data-i18n="next" data-i18n-attr="aria-label:next">下一页</button>
             </div>
         </div>

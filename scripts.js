@@ -1429,3 +1429,321 @@
             resultEl.textContent = randomNum;
             resultEl.style.color = '#667eea';
         };
+
+        // 单位转换器
+        window.convertUnit = function() {
+            const type = document.getElementById('unitType').value;
+            const value = parseFloat(document.getElementById('unitInput').value);
+            const from = document.getElementById('unitFrom').value;
+            const to = document.getElementById('unitTo').value;
+            const resultEl = document.getElementById('unitResult');
+
+            if (isNaN(value)) {
+                resultEl.textContent = '请输入数值';
+                return;
+            }
+
+            let result;
+            if (type === 'length') {
+                // 转换为米作为中间单位
+                let meters = from === 'm' ? value : value / 100;
+                result = to === 'm' ? meters : meters * 100;
+                resultEl.textContent = value + (from === 'm' ? '米' : '厘米') + ' = ' + result.toFixed(2) + (to === 'm' ? '米' : '厘米');
+            } else if (type === 'weight') {
+                // 转换为公斤作为中间单位
+                let kg = from === 'kg' ? value : value / 1000;
+                result = to === 'kg' ? kg : kg * 1000;
+                resultEl.textContent = value + (from === 'kg' ? '公斤' : '克') + ' = ' + result.toFixed(2) + (to === 'kg' ? '公斤' : '克');
+            } else if (type === 'temperature') {
+                if (from === to) {
+                    result = value;
+                } else if (from === 'c') {
+                    result = value * 9 / 5 + 32;
+                    resultEl.textContent = value + '°C = ' + result.toFixed(2) + '°F';
+                    return;
+                } else {
+                    result = (value - 32) * 5 / 9;
+                    resultEl.textContent = value + '°F = ' + result.toFixed(2) + '°C';
+                    return;
+                }
+                resultEl.textContent = result.toFixed(2);
+            }
+        };
+
+        // 监听单位类型变化，更新选项
+        document.getElementById('unitType').addEventListener('change', function() {
+            const type = this.value;
+            const fromSelect = document.getElementById('unitFrom');
+            const toSelect = document.getElementById('unitTo');
+
+            if (type === 'length') {
+                fromSelect.innerHTML = '<option value="m">米</option><option value="cm">厘米</option>';
+                toSelect.innerHTML = '<option value="cm">厘米</option><option value="m">米</option>';
+            } else if (type === 'weight') {
+                fromSelect.innerHTML = '<option value="kg">公斤</option><option value="g">克</option>';
+                toSelect.innerHTML = '<option value="g">克</option><option value="kg">公斤</option>';
+            } else if (type === 'temperature') {
+                fromSelect.innerHTML = '<option value="c">摄氏度</option><option value="f">华氏度</option>';
+                toSelect.innerHTML = '<option value="f">华氏度</option><option value="c">摄氏度</option>';
+            }
+        });
+
+        // 颜色选择器
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+            return { h: Math.round(h * 360), s: Math.round(s * 100), l: Math.round(l * 100) };
+        }
+
+        document.getElementById('colorPickerInput').addEventListener('input', function() {
+            const hex = this.value;
+            const rgb = hexToRgb(hex);
+            if (rgb) {
+                document.getElementById('hexValue').value = hex;
+                document.getElementById('rgbValue').value = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+                const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+                document.getElementById('hslValue').value = `${hsl.h}, ${hsl.s}%, ${hsl.l}%`;
+            }
+        });
+
+        window.copyColor = function() {
+            const hex = document.getElementById('hexValue').value;
+            navigator.clipboard.writeText(hex).then(() => {
+                alert('已复制: ' + hex);
+            });
+        };
+
+        // 进制转换器
+        window.convertBase = function() {
+            const input = document.getElementById('baseInput').value.trim();
+            const fromBase = parseInt(document.getElementById('baseFrom').value);
+
+            if (!input) {
+                document.getElementById('binResult').textContent = '';
+                document.getElementById('octResult').textContent = '';
+                document.getElementById('decResult').textContent = '';
+                document.getElementById('hexResult').textContent = '';
+                return;
+            }
+
+            try {
+                let decimal;
+                if (fromBase === 16) {
+                    decimal = parseInt(input, 16);
+                } else if (fromBase === 8) {
+                    decimal = parseInt(input, 8);
+                } else if (fromBase === 2) {
+                    decimal = parseInt(input, 2);
+                } else {
+                    decimal = parseInt(input, 10);
+                }
+
+                if (isNaN(decimal)) {
+                    throw new Error('Invalid number');
+                }
+
+                document.getElementById('binResult').textContent = decimal.toString(2);
+                document.getElementById('octResult').textContent = decimal.toString(8);
+                document.getElementById('decResult').textContent = decimal.toString(10);
+                document.getElementById('hexResult').textContent = decimal.toString(16).toUpperCase();
+            } catch (e) {
+                document.getElementById('binResult').textContent = '无效';
+                document.getElementById('octResult').textContent = '无效';
+                document.getElementById('decResult').textContent = '无效';
+                document.getElementById('hexResult').textContent = '无效';
+            }
+        };
+
+        // 幸运签
+        const fortunes = [
+            { text: '今天会有好事发生！', luck: '大吉' },
+            { text: '保持微笑，好运就会来。', luck: '吉' },
+            { text: '注意把握身边的机会。', luck: '中吉' },
+            { text: '今天适合学习新知识。', luck: '吉' },
+            { text: '可能会有意外惊喜！', luck: '大吉' },
+            { text: '注意休息，别太劳累。', luck: '中吉' },
+            { text: '与人为善会有好回报。', luck: '吉' },
+            { text: '今天做事要细心。', luck: '中吉' },
+            { text: '相信自己的直觉。', luck: '吉' },
+            { text: '适当放松会更好。', luck: '中吉' }
+        ];
+        let fortuneCount = 0;
+
+        document.getElementById('drawFortune').addEventListener('click', function() {
+            const fortuneBox = document.getElementById('fortuneBox');
+            const fortuneText = document.getElementById('fortuneText');
+
+            fortuneBox.style.animation = 'shake 0.5s ease';
+            setTimeout(() => fortuneBox.style.animation = '', 500);
+
+            setTimeout(() => {
+                const randomFortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+                const colors = { '大吉': '#4caf50', '吉': '#8bc34a', '中吉': '#ff9800' };
+                const color = colors[randomFortune.luck] || '#667eea';
+
+                fortuneText.innerHTML = `
+                    <div style="color: ${color}; font-size: 20px; font-weight: bold; margin-bottom: 8px;">${randomFortune.luck}</div>
+                    <div style="color: #333; font-size: 14px;">${randomFortune.text}</div>
+                `;
+
+                fortuneCount++;
+                document.getElementById('fortuneCount').textContent = fortuneCount;
+            }, 500);
+        });
+
+        // 心理测试
+        const quizResponses = {
+            happy: '你今天心情很好呢！继续保持这份快乐，传递给身边的人吧！😊',
+            normal: '平凡的日子也很珍贵，享受当下的平静吧。😐',
+            sad: '别难过，一切都会好起来的。记得倾诉和释放情绪。😔',
+            tired: '要注意休息哦！适当放空自己，给自己充电。😴'
+        };
+
+        document.querySelectorAll('.quiz-option').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const answer = this.dataset.answer;
+                const resultDiv = document.getElementById('quizResult');
+                resultDiv.textContent = quizResponses[answer];
+                resultDiv.style.display = 'block';
+            });
+        });
+
+        // 记事本
+        let notes = JSON.parse(localStorage.getItem('notes')) || [];
+        let currentNoteId = null;
+
+        function renderNoteList() {
+            const noteList = document.getElementById('noteList');
+            noteList.innerHTML = '';
+            notes.forEach(note => {
+                const noteEl = document.createElement('div');
+                noteEl.style.padding = '8px';
+                noteEl.style.background = note.id === currentNoteId ? '#e8f5e9' : '#f5f5f5';
+                noteEl.style.borderRadius = '4px';
+                noteEl.style.marginBottom = '5px';
+                noteEl.style.cursor = 'pointer';
+                noteEl.style.display = 'flex';
+                noteEl.style.justifyContent = 'space-between';
+                noteEl.style.alignItems = 'center';
+                noteEl.innerHTML = `
+                    <span style="font-size: 12px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${note.title || '无标题'}</span>
+                    <button onclick="deleteNote(${note.id}); event.stopPropagation();" style="background: #f44336; color: white; border: none; border-radius: 3px; padding: 2px 6px; font-size: 10px;">删除</button>
+                `;
+                noteEl.addEventListener('click', () => loadNote(note.id));
+                noteList.appendChild(noteEl);
+            });
+            document.getElementById('noteCount').textContent = notes.length;
+        }
+
+        function loadNote(id) {
+            const note = notes.find(n => n.id === id);
+            if (note) {
+                currentNoteId = id;
+                document.getElementById('noteTitle').value = note.title;
+                document.getElementById('noteContent').value = note.content;
+                renderNoteList();
+            }
+        }
+
+        window.deleteNote = function(id) {
+            notes = notes.filter(n => n.id !== id);
+            if (currentNoteId === id) {
+                currentNoteId = null;
+                document.getElementById('noteTitle').value = '';
+                document.getElementById('noteContent').value = '';
+            }
+            localStorage.setItem('notes', JSON.stringify(notes));
+            renderNoteList();
+        };
+
+        document.getElementById('saveNote').addEventListener('click', () => {
+            const title = document.getElementById('noteTitle').value.trim();
+            const content = document.getElementById('noteContent').value.trim();
+
+            if (!title && !content) {
+                alert('请输入标题或内容');
+                return;
+            }
+
+            if (currentNoteId) {
+                const note = notes.find(n => n.id === currentNoteId);
+                if (note) {
+                    note.title = title;
+                    note.content = content;
+                    note.updatedAt = new Date().toLocaleString();
+                }
+            } else {
+                notes.push({
+                    id: Date.now(),
+                    title: title,
+                    content: content,
+                    createdAt: new Date().toLocaleString()
+                });
+                currentNoteId = notes[notes.length - 1].id;
+            }
+
+            localStorage.setItem('notes', JSON.stringify(notes));
+            renderNoteList();
+            alert('笔记已保存！');
+        });
+
+        document.getElementById('newNote').addEventListener('click', () => {
+            currentNoteId = null;
+            document.getElementById('noteTitle').value = '';
+            document.getElementById('noteContent').value = '';
+            renderNoteList();
+        });
+
+        document.getElementById('exportNotes').addEventListener('click', () => {
+            if (notes.length === 0) {
+                alert('没有笔记可导出');
+                return;
+            }
+            let exportText = '# 我的笔记\n\n';
+            notes.forEach(note => {
+                exportText += `## ${note.title || '无标题'}\n`;
+                exportText += `创建时间: ${note.createdAt || ''}\n\n`;
+                exportText += `${note.content}\n\n---\n\n`;
+            });
+
+            const blob = new Blob([exportText], { type: 'text/markdown;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = '我的笔记.md';
+            link.click();
+        });
+
+        document.getElementById('clearNotes').addEventListener('click', () => {
+            if (confirm('确定要清空所有笔记吗？此操作不可恢复！')) {
+                notes = [];
+                currentNoteId = null;
+                localStorage.removeItem('notes');
+                document.getElementById('noteTitle').value = '';
+                document.getElementById('noteContent').value = '';
+                renderNoteList();
+            }
+        });
+
+        renderNoteList();
